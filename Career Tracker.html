@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Career Tracker</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#eef2f6;--card:#fff;--tx:#0f1b2d;--mu:#5b6b80;--ac:#2457f5;--ac2:#f2a900;--bd:#d9e0e8;--ok:#1f9d6b;--soft:#e6edff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1320;--card:#141e30;--tx:#e8eef7;--mu:#93a3ba;--ac:#6c8cff;--ac2:#ffc233;--bd:#26344b;--ok:#3ecf94;--soft:#1c2a47}}
+:root[data-theme="dark"]{--bg:#0c1320;--card:#141e30;--tx:#e8eef7;--mu:#93a3ba;--ac:#6c8cff;--ac2:#ffc233;--bd:#26344b;--ok:#3ecf94;--soft:#1c2a47}
+:root[data-theme="sakura"]{--bg:#fff1f5;--card:#fffafc;--tx:#3a1a2b;--mu:#8a6577;--ac:#d9468b;--ac2:#f59e0b;--ac3:#a855f7;--bd:#f3cfe0;--ok:#16a37a;--soft:#fde2ee}
+:root[data-theme="forest"]{--bg:#eef5ee;--card:#fbfefb;--tx:#16301f;--mu:#5c7a66;--ac:#2f8f4e;--ac2:#e0a100;--ac3:#0e9fa8;--bd:#cfe3d3;--ok:#1f9d6b;--soft:#dff2e3}
+:root[data-theme="neon"]{--bg:#070b10;--card:#0d141c;--tx:#d7ffe9;--mu:#6fa58c;--ac:#2cf59b;--ac2:#ffd23f;--ac3:#22d3ee;--bd:#18303a;--ok:#2cf59b;--soft:#0f2a24;--onac:#04130c}
+:root[data-theme="neon"] h1,:root[data-theme="neon"] h2,:root[data-theme="neon"] .big{font-family:ui-monospace,Menlo,monospace}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:radial-gradient(900px 420px at 0% -10%,var(--soft),transparent 65%),var(--bg)}
+.card{border-radius:16px}
+button.pri{color:var(--onac,#fff)}button:active{transform:scale(.96)}
+.hero{background:linear-gradient(135deg,var(--ac),var(--ac3,var(--ac2)));color:var(--onac,#fff);border-radius:18px;padding:22px 24px;margin-bottom:14px}
+.setup{border:2px dashed var(--ac)}.hero h2{font-size:26px}.hero p{margin:6px 0 0;opacity:.95}
+.ctl{display:flex;gap:10px;align-items:center}.themes{display:inline-flex;gap:6px}
+.dot{width:22px;height:22px;padding:0;border-radius:50%;border:2px solid var(--bd)}.dot.on{outline:2px solid var(--ac);outline-offset:2px}
+.lv{padding:14px 18px}.lvrow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:.3s;z-index:10;font-size:14px;max-width:90vw}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.cf{position:fixed;top:-30px;font-style:normal;pointer-events:none;z-index:9;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.3}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
+h1,h2,h3,.big{font-family:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;margin:0}
+header{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+h1{font-size:30px;letter-spacing:-.5px}
+.sub{color:var(--mu);font-size:14px}
+nav{display:flex;gap:4px;overflow-x:auto;margin-bottom:18px;border-bottom:1px solid var(--bd)}
+nav button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;padding:10px 12px;white-space:nowrap;color:var(--mu);font-weight:500}
+nav button.on{color:var(--tx);border-color:var(--ac)}
+button,input,select,textarea{font:inherit;color:inherit;background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 11px}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button.pri{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:500}
+button.ic{padding:5px 10px;color:var(--mu)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.grid .card{margin:0}
+.big{font-size:34px;font-weight:700;line-height:1.1;margin:4px 0}
+.mu{color:var(--mu);font-size:13px}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--ac);transition:width .4s}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 0;border-bottom:1px solid var(--bd)}
+.row:last-of-type{border:0}.grow{flex:1;min-width:140px}
+.add{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.add input,.add select{flex:1;min-width:110px}
+.tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;background:var(--soft);color:var(--ac);font-weight:600}
+.tag.done{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chips button{font-size:13px;border-radius:99px;padding:4px 12px}
+.next{border-left:4px solid var(--ac2)}
+.next li{margin:6px 0}
+textarea{width:100%;height:80px;font-family:ui-monospace,monospace;font-size:12px}
+.hint{font-size:13px;color:var(--mu);margin:0 0 10px}
+.paper{background:#fff;color:#111;border:1px solid var(--bd);border-radius:6px;padding:36px 40px;max-width:720px;margin:0 auto;box-shadow:0 8px 30px rgba(15,27,45,.12);font-size:14px;line-height:1.5}
+.paper h2{font-size:26px;letter-spacing:-.3px}
+.paper h3{font-size:13px;letter-spacing:.8px;text-transform:uppercase;border-bottom:1.5px solid #111;padding-bottom:3px;margin:20px 0 8px}
+.paper .ct{color:#444;font-size:13px;margin-top:2px}
+.paper .ln{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.paper p{margin:2px 0 8px}.paper a{color:#2457f5}
+@media(max-width:560px){.paper{padding:22px 18px}h1{font-size:25px}}
+@media print{body{background:#fff}header,nav,.noprint{display:none!important}main{padding:0;max-width:none}.paper{border:0;box-shadow:none;padding:0;max-width:none}}
+</style></head><body><main>
+<header class="noprint"><div><h1>🚀 Career Tracker</h1><div class="sub" id="sub"></div></div>
+<div class="ctl"><span id="thm" class="themes"></span><button class="ic" id="sbtn" onclick="togSnd()" aria-label="Toggle sound"></button></div></header>
+<div id="lvl" class="card lv noprint"></div><div id="tst" class="toast" role="status"></div>
+<nav id="nav" class="noprint"></nav><div id="v"></div>
+<div class="card noprint"><b>Backup / Restore</b><p class="hint">Export copies your data as text so you can save it or give it to Claude's tracker skill. Paste it back and press Import to restore.</p>
+<textarea id="bk" aria-label="Backup data"></textarea><div class="add"><button onclick="ex()">Export</button><button onclick="im()">Import</button></div></div>
+</main>
+<script>
+const KEY='tracker-v1',TABS=['Overview','Practice','Projects','Internships','Skills','Academics','Resume'];
+const ST=['Wishlist','Applied','Interview','Offer','Rejected'],LV=['Learning','Practicing','Built a project'],PS=['Idea','Building','Done'];
+const IDEAS=['Portfolio website','Course mini project','Club or community project','Research summary'];
+const def=()=>({dsa:['Class revision','Practice problems','Mock tests','Assignments'].map((t,i)=>({id:i+1,topic:t,solved:0,total:20})),jobs:[],skills:[],acad:[],projects:[],profile:{name:'',email:'',github:'',linkedin:'',degree:'',college:'',goal:''}});
+let S,tab=0;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.dsa)S=def();
+fix();
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nid=a=>a.reduce((m,x)=>Math.max(m,x.id),0)+1;
+const pct=(a,b)=>b?Math.min(100,Math.round(a/b*100)):0;
+const bar=p=>`<div class="bar"><i style="width:${p}%"></i></div>`;
+function save(){const m=S.meta,d=new Date().toDateString();
+ if(m.last!==d){m.streak=m.last===new Date(Date.now()-864e5).toDateString()?m.streak+1:1;m.last=d}
+ const l=Math.floor(xp()/150)+1,up=l>m.lv;m.lv=Math.max(m.lv,l);
+ try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}render();
+ if(up){fx();toast('Level up! You reached level '+l+' 🎉');snd('win')}}
+function cgpa(){let c=0,p=0;S.acad.forEach(x=>{c+=+x.credits;p+=x.credits*x.gp});return c?(p/c).toFixed(2):'–'}
+const val=id=>document.getElementById(id).value.trim();
+function add(k,o){S[k].push({id:nid(S[k]),...o});snd('pop');save()}
+function del(k,id){S[k]=S[k].filter(x=>x.id!==id);snd('del');save()}
+function bump(id,d){const t=S.dsa.find(x=>x.id===id);t.solved=Math.max(0,t.solved+d);if(d>0&&t.solved===t.total){fx();toast('Topic complete: '+t.topic+' ✅');snd('win')}else snd(d>0?'tick':'del');save()}
+function setF(k,id,f,v){S[k].find(x=>x.id===id)[f]=v;if(v==='Done'||v==='Offer'){fx();toast(v==='Offer'?'An offer! Congratulations 🎊':'Project done! It now shows on your resume 🏆');snd('win')}else snd('pop');save()}
+function prof(f,v){S.profile[f]=v.trim();save()}
+function opts(a,s){return a.map(o=>`<option${o===s?' selected':''}>${o}</option>`).join('')}
+function link(u){u=esc(u);return /^https?:\/\//.test(u)?u:'https://'+u}
+function render(){
+ nav.innerHTML=TABS.map((t,i)=>`<button class="${i===tab?'on':''}" onclick="tab=${i};snd('click');render()">${t}</button>`).join('');
+ sub.textContent=[S.profile.name,S.profile.degree,S.profile.college].filter(Boolean).join(' · ')||'Your college journey, tracked';
+ const X=xp(),L=Math.floor(X/150)+1,M=S.meta;
+ lvl.innerHTML=`<div class="lvrow"><b>Level ${L}: ${RK[Math.min(5,Math.floor((L-1)/2))]}</b><span>🔥 ${M.streak||0}-day streak</span><span class="mu">${X} XP</span></div>${bar((X%150)/150*100)}<div class="mu">${150-X%150} XP to level ${L+1}. Practising, building projects and adding skills all earn XP.</div>`;
+ thm.innerHTML=TH.map(([k,n,c])=>`<button class="dot${M.theme===k?' on':''}" style="background:${c}" title="${n}" aria-label="${n} theme" onclick="setTh('${k}')"></button>`).join('');
+ sbtn.textContent=M.sound?'🔊':'🔇';applyTh();
+ const sv=S.dsa.reduce((a,x)=>a+x.solved,0),tt=S.dsa.reduce((a,x)=>a+x.total,0),n=s=>S.jobs.filter(j=>j.status===s).length,g=cgpa();
+ const done=S.projects.filter(p=>p.status==='Done');
+ let h='';const ok=S.profile.name&&S.meta.start&&!editing;
+ if(tab===0){
+  const nx=[];
+  if(!S.profile.name)nx.push('Add your name and contact links in the Resume tab.');
+  if(!S.projects.length)nx.push('Add your first project in Projects.');
+  else if(!done.length)nx.push('Finish one project and mark it Done so it shows on your resume.');
+  if(sv<20)nx.push('Log your first 20 practice items to build a steady habit.');
+  if(!S.acad.length)nx.push('Add your subjects in Academics to track your CGPA.');
+  if(!S.jobs.length)nx.push('Add 5 internships to your wishlist so you know where to aim.');
+  h=`${ok?'':setupCard()}<div class="hero"${ok?'':' hidden'}><h2>${new Date().getHours()<12?'Good morning':new Date().getHours()<18?'Good afternoon':'Good evening'}${S.profile.name?', '+esc(S.profile.name.split(' ')[0]):''} 👋</h2><p>${QS[new Date().getDate()%QS.length]}</p><p><b>Day ${days()}</b> of your journey, started ${new Date(S.meta.start+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})}. <button class="ic" style="background:transparent;color:inherit;border-color:currentColor" onclick="editMe()">Edit</button></p></div><div class="grid">
+  <div class="card"><div class="mu">Practice done</div><div class="big">${sv}<span class="mu">/${tt}</span></div>${bar(pct(sv,tt))}</div>
+  <div class="card"><div class="mu">Projects done</div><div class="big">${done.length}<span class="mu">/${S.projects.length}</span></div>${bar(pct(done.length,S.projects.length))}</div>
+  <div class="card"><div class="mu">CGPA</div><div class="big">${g}</div>${bar(g==='–'?0:pct(g,10))}</div>
+  <div class="card"><div class="mu">Internships</div><div class="big">${S.jobs.length}</div><div class="mu">${n('Applied')} applied, ${n('Interview')} interviews, ${n('Offer')} offers</div></div></div>
+  <div class="card next"><h3>Your next steps</h3>${nx.length?'<ul>'+nx.slice(0,4).map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p>Everything is on track. Keep going, and update your numbers weekly.</p>'}</div>`;
+ }
+ if(tab===1)h=`<div class="card"><p class="hint">Track anything you practise: problems, chapters, mock tests or assignments. Press + each time you finish one.</p>${S.dsa.map(t=>`<div class="row"><div class="grow"><b>${esc(t.topic)}</b>${bar(pct(t.solved,t.total))}</div>
+  <button class="ic" aria-label="Decrease" onclick="bump(${t.id},-1)">−</button><span>${t.solved}/${t.total}</span><button class="ic" aria-label="Increase" onclick="bump(${t.id},1)">+</button><button class="ic" aria-label="Remove" onclick="del('dsa',${t.id})">✕</button></div>`).join('')}
+  <div class="add"><input id="a1" placeholder="New topic"><input id="a2" type="number" placeholder="Target" style="max-width:100px"><button class="pri" onclick="val('a1')&&add('dsa',{topic:val('a1'),solved:0,total:+val('a2')||20})">Add topic</button></div></div>`;
+ if(tab===2)h=`<div class="card">${S.projects.map(p=>`<div class="row"><div class="grow"><b>${esc(p.name)}</b> <span class="tag ${p.status==='Done'?'done':''}">${p.status}</span><div class="mu">${esc(p.desc)}</div></div>
+  <select aria-label="Status" onchange="setF('projects',${p.id},'status',this.value)">${opts(PS,p.status)}</select><button class="ic" aria-label="Remove" onclick="del('projects',${p.id})">✕</button></div>`).join('')||'<div class="mu">No projects yet. Pick an idea below or write your own.</div>'}
+  <div class="chips">${IDEAS.map(i=>`<button onclick="document.getElementById('a1').value='${i}'">${i}</button>`).join('')}</div>
+  <div class="add"><input id="a1" placeholder="Project name"><input id="a2" placeholder="One line: what it does and what you used"><input id="a3" placeholder="GitHub link (optional)"><button class="pri" onclick="val('a1')&&add('projects',{name:val('a1'),desc:val('a2'),link:val('a3'),status:'Idea'})">Add project</button></div></div>`;
+ if(tab===3)h=`<div class="card">${S.jobs.map(j=>`<div class="row"><div class="grow"><b>${esc(j.company)}</b><div class="mu">${esc(j.role)}</div></div>
+  <select aria-label="Status" onchange="setF('jobs',${j.id},'status',this.value)">${opts(ST,j.status)}</select><button class="ic" aria-label="Remove" onclick="del('jobs',${j.id})">✕</button></div>`).join('')||'<div class="mu">No applications yet. Add a company to start your wishlist.</div>'}
+  <div class="add"><input id="a1" placeholder="Company"><input id="a2" placeholder="Role"><button class="pri" onclick="val('a1')&&add('jobs',{company:val('a1'),role:val('a2'),status:'Wishlist'})">Add</button></div></div>`;
+ if(tab===4)h=`<div class="card">${S.skills.map(s=>`<div class="row"><b class="grow">${esc(s.name)}</b>
+  <select aria-label="Level" onchange="setF('skills',${s.id},'level',this.value)">${opts(LV,s.level)}</select><button class="ic" aria-label="Remove" onclick="del('skills',${s.id})">✕</button></div>`).join('')||'<div class="mu">Add Excel, Python, public speaking, design…</div>'}
+  <div class="add"><input id="a1" placeholder="Skill learnt"><button class="pri" onclick="val('a1')&&add('skills',{name:val('a1'),level:'Learning'})">Add skill</button></div></div>`;
+ if(tab===5)h=`<div class="card"><div class="mu">CGPA (10-point scale)</div><div class="big">${g}</div>${g==='–'?'':bar(pct(g,10))}${S.acad.map(a=>`<div class="row"><div class="grow"><b>${esc(a.subject)}</b><div class="mu">${a.credits} credits</div></div><span>${a.gp}/10</span><button class="ic" aria-label="Remove" onclick="del('acad',${a.id})">✕</button></div>`).join('')}
+  <div class="add"><input id="a1" placeholder="Subject"><input id="a2" type="number" placeholder="Credits" style="max-width:100px"><input id="a3" type="number" step="0.1" max="10" placeholder="Grade points" style="max-width:120px"><button class="pri" onclick="val('a1')&&val('a2')&&val('a3')&&add('acad',{subject:val('a1'),credits:+val('a2'),gp:+val('a3')})">Add subject</button></div></div>`;
+ if(tab===6){
+  const P=S.profile,lv=l=>S.skills.filter(s=>s.level===l).map(s=>esc(s.name)),sk=[['Built a project',lv(LV[2])],['Practicing',lv(LV[1])],['Learning',lv(LV[0])]].filter(x=>x[1].length);
+  const shown=S.projects.filter(p=>p.status!=='Idea');
+  const ct=[P.email&&esc(P.email),P.github&&`<a href="${link(P.github)}">${esc(P.github)}</a>`,P.linkedin&&`<a href="${link(P.linkedin)}">${esc(P.linkedin)}</a>`].filter(Boolean).join(' | ');
+  h=`<div class="card noprint"><b>Your details</b><p class="hint">Fill these in. The resume below uses only what you have entered in this tracker.</p>
+  <div class="add" style="margin-top:0"><input placeholder="Full name" value="${esc(P.name)}" onchange="prof('name',this.value)"><input placeholder="Email" value="${esc(P.email)}" onchange="prof('email',this.value)"></div>
+  <div class="add"><input placeholder="GitHub URL" value="${esc(P.github)}" onchange="prof('github',this.value)"><input placeholder="LinkedIn URL" value="${esc(P.linkedin)}" onchange="prof('linkedin',this.value)"></div>
+  <div class="add"><input placeholder="Degree and course (e.g. B.A. Economics)" value="${esc(P.degree)}" onchange="prof('degree',this.value)"><input placeholder="College" value="${esc(P.college)}" onchange="prof('college',this.value)"></div>
+  <div class="add"><input placeholder="One-line goal or summary (optional)" value="${esc(P.goal)}" onchange="prof('goal',this.value)"></div>
+  <div class="add"><button class="pri" onclick="try{window.print()}catch(e){alert('Use your browser menu: Print, then Save as PDF.')}">Print or save as PDF</button></div></div>
+  <div class="paper"><h2>${esc(P.name)||'Your Name'}</h2><div class="ct">${ct||'Add your email and links above'}</div>
+  ${P.degree||P.college?`<h3>Education</h3><div class="ln"><b>${esc(P.degree)}</b><span>${g==='–'?'':'CGPA: '+g+' / 10'}</span></div><div>${esc(P.college)}</div>`:''}
+  ${P.goal?`<h3>Summary</h3><p>${esc(P.goal)}</p>`:''}
+  ${shown.length?'<h3>Projects</h3>'+shown.map(p=>`<div class="ln"><b>${esc(p.name)}</b><span>${p.status==='Building'?'In progress':''}${p.link?` <a href="${link(p.link)}">Code</a>`:''}</span></div><p>${esc(p.desc)}</p>`).join(''):''}
+  ${sk.length?'<h3>Skills</h3>'+sk.map(x=>`<p><b>${x[0]}:</b> ${x[1].join(', ')}</p>`).join(''):''}
+  ${sv?`<h3>Practice</h3><p>Completed ${sv} practice items across ${S.dsa.filter(x=>x.solved).length} topics.</p>`:''}</div>`;
+ }
+ v.innerHTML=h;
+}
+function fix(){S.projects=S.projects||[];S.profile=Object.assign({name:'',email:'',github:'',linkedin:'',degree:'',college:'',goal:''},S.profile||{});S.meta=Object.assign({streak:0,last:'',theme:'auto',sound:1,lv:1,start:''},S.meta||{})}
+const TH=[['auto','Auto','#2457f5'],['light','Light','#ffffff'],['dark','Dark','#141e30'],['sakura','Sakura','#d9468b'],['forest','Forest','#2f8f4e'],['neon','Neon','#2cf59b']];
+const RK=['Newbie','Explorer','Builder','Defender','Pro','Legend'];
+const QS=['Small steps every day beat big plans someday.','Ship the tiny project first. Polish it later.','Every expert was once a beginner who kept going.','Learn it, break it, fix it, repeat.','Curiosity is the best study habit.','Consistency beats intensity.','Your future self will thank you for today.'];
+function xp(){const P=S.projects,J=S.jobs,K=S.skills,c=(a,f)=>a.filter(f).length;
+ return S.dsa.reduce((a,x)=>a+x.solved*10,0)+c(P,p=>p.status==='Done')*120+c(P,p=>p.status==='Building')*30+K.length*15+c(K,s=>s.level===LV[2])*40+J.length*10+c(J,j=>j.status==='Interview')*60+c(J,j=>j.status==='Offer')*200+S.acad.length*10}
+function setTh(t){S.meta.theme=t;snd('pop');save()}
+function applyTh(){const t=S.meta.theme,r=document.documentElement;t==='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',t)}
+function togSnd(){S.meta.sound=S.meta.sound?0:1;save();snd('pop')}
+let AC,tmr;
+function snd(t){if(!S.meta.sound)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();let at=AC.currentTime;
+ ({click:[[660,.05]],pop:[[520,.06],[780,.08]],tick:[[880,.04]],del:[[300,.09]],win:[[523,.1],[659,.1],[784,.1],[1047,.22]]}[t]||[]).forEach(([f,d])=>{const o=AC.createOscillator(),g=AC.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(.08,at);g.gain.exponentialRampToValueAtTime(.001,at+d);o.connect(g);g.connect(AC.destination);o.start(at);o.stop(at+d);at+=d*.8})}catch(e){}}
+function toast(t){tst.textContent=t;tst.classList.add('on');clearTimeout(tmr);tmr=setTimeout(()=>tst.classList.remove('on'),2600)}
+function fx(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;for(let i=0;i<28;i++){const e=document.createElement('i');e.className='cf';e.textContent=['🎉','✨','⭐','💙','🔥'][i%5];e.style.cssText=`left:${Math.random()*100}vw;animation-delay:${Math.random()*.4}s;font-size:${14+Math.random()*14}px`;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)}}
+let editing=0;
+function days(){if(!S.meta.start)return 1;return Math.max(1,Math.floor((new Date().setHours(0,0,0,0)-new Date(S.meta.start+'T00:00:00'))/864e5)+1)}
+function setupCard(){const t=new Date().toISOString().slice(0,10);return `<div class="card setup"><h3>👋 Let's make this yours</h3><p class="hint">Tell me your name and the day you started your journey. I will greet you by name and count your days.</p><div class="add" style="margin-top:0"><input id="nm" placeholder="Your name" aria-label="Your name" value="${esc(S.profile.name)}"><input id="sd" type="date" aria-label="Start date" value="${S.meta.start||t}" max="${t}"><button class="pri" onclick="setMe()">Start my journey</button></div></div>`}
+function setMe(){const n=val('nm'),d=val('sd');if(!n||!d){toast('Enter your name and start date first');return}S.profile.name=n;S.meta.start=d;editing=0;fx();toast('Welcome aboard, '+n.split(' ')[0]+'! 🎉');snd('win');save()}
+function editMe(){editing=1;snd('click');render()}
+function ex(){bk.value=JSON.stringify(S)}
+function im(){try{const d=JSON.parse(bk.value);if(!d.dsa)throw 0;S=d;fix();save()}catch(e){alert('That text is not valid tracker data.')}}
+render();
+</script></body></html>
